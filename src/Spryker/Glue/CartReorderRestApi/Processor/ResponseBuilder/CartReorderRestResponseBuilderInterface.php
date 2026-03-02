@@ -13,20 +13,8 @@ use Spryker\Glue\GlueApplication\Rest\Request\Data\RestRequestInterface;
 
 interface CartReorderRestResponseBuilderInterface
 {
-    /**
-     * @param \Generated\Shared\Transfer\CartReorderResponseTransfer $cartReorderResponseTransfer
-     * @param \Spryker\Glue\GlueApplication\Rest\Request\Data\RestRequestInterface $restRequest
-     *
-     * @return \Spryker\Glue\GlueApplication\Rest\JsonApi\RestResponseInterface
-     */
     public function buildSuccessfulResponse(CartReorderResponseTransfer $cartReorderResponseTransfer, RestRequestInterface $restRequest): RestResponseInterface;
 
-    /**
-     * @param \Generated\Shared\Transfer\CartReorderResponseTransfer $cartReorderResponseTransfer
-     * @param string $locale
-     *
-     * @return \Spryker\Glue\GlueApplication\Rest\JsonApi\RestResponseInterface
-     */
     public function buildErrorResponse(CartReorderResponseTransfer $cartReorderResponseTransfer, string $locale): RestResponseInterface;
 
     /**

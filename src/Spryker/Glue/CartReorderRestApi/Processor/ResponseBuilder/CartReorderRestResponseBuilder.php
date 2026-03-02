@@ -17,11 +17,6 @@ use Spryker\Glue\GlueApplication\Rest\Request\Data\RestRequestInterface;
 
 class CartReorderRestResponseBuilder implements CartReorderRestResponseBuilderInterface
 {
-    /**
-     * @param \Spryker\Glue\CartReorderRestApi\Dependency\Glue\CartReorderRestApiToCartsRestApiResourceInterface $cartsRestApiResource
-     * @param \Spryker\Glue\GlueApplication\Rest\JsonApi\RestResourceBuilderInterface $restResourceBuilder
-     * @param \Spryker\Glue\CartReorderRestApi\Processor\Mapper\CartReorderRestErrorMapperInterface $cartReorderRestErrorMapper
-     */
     public function __construct(
         protected CartReorderRestApiToCartsRestApiResourceInterface $cartsRestApiResource,
         protected RestResourceBuilderInterface $restResourceBuilder,
@@ -29,12 +24,6 @@ class CartReorderRestResponseBuilder implements CartReorderRestResponseBuilderIn
     ) {
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\CartReorderResponseTransfer $cartReorderResponseTransfer
-     * @param \Spryker\Glue\GlueApplication\Rest\Request\Data\RestRequestInterface $restRequest
-     *
-     * @return \Spryker\Glue\GlueApplication\Rest\JsonApi\RestResponseInterface
-     */
     public function buildSuccessfulResponse(
         CartReorderResponseTransfer $cartReorderResponseTransfer,
         RestRequestInterface $restRequest
@@ -45,12 +34,6 @@ class CartReorderRestResponseBuilder implements CartReorderRestResponseBuilderIn
         );
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\CartReorderResponseTransfer $cartReorderResponseTransfer
-     * @param string $locale
-     *
-     * @return \Spryker\Glue\GlueApplication\Rest\JsonApi\RestResponseInterface
-     */
     public function buildErrorResponse(CartReorderResponseTransfer $cartReorderResponseTransfer, string $locale): RestResponseInterface
     {
         $restResponse = $this->restResourceBuilder->createRestResponse();

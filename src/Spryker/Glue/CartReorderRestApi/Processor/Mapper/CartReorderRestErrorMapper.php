@@ -15,23 +15,12 @@ use Symfony\Component\HttpFoundation\Response;
 
 class CartReorderRestErrorMapper implements CartReorderRestErrorMapperInterface
 {
-    /**
-     * @param \Spryker\Glue\CartReorderRestApi\CartReorderRestApiConfig $cartReorderRestApiConfig
-     * @param \Spryker\Glue\CartReorderRestApi\Dependency\Client\CartReorderRestApiToGlossaryStorageClientInterface $glossaryStorageClient
-     */
     public function __construct(
         protected CartReorderRestApiConfig $cartReorderRestApiConfig,
         protected CartReorderRestApiToGlossaryStorageClientInterface $glossaryStorageClient
     ) {
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\ErrorTransfer $errorTransfer
-     * @param \Generated\Shared\Transfer\RestErrorMessageTransfer $restErrorMessageTransfer
-     * @param string $locale
-     *
-     * @return \Generated\Shared\Transfer\RestErrorMessageTransfer
-     */
     public function mapErrorTransferToRestErrorMessageTransfer(
         ErrorTransfer $errorTransfer,
         RestErrorMessageTransfer $restErrorMessageTransfer,

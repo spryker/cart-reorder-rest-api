@@ -25,11 +25,6 @@ class CartReorderRestApiToCartReorderClientBridge implements CartReorderRestApiT
         $this->cartReorderClient = $cartReorderClient;
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\CartReorderRequestTransfer $cartReorderRequestTransfer
-     *
-     * @return \Generated\Shared\Transfer\CartReorderResponseTransfer
-     */
     public function reorder(CartReorderRequestTransfer $cartReorderRequestTransfer): CartReorderResponseTransfer
     {
         return $this->cartReorderClient->reorder($cartReorderRequestTransfer);

@@ -19,12 +19,6 @@ class CartReorderRestRequestMapper implements CartReorderRestRequestMapperInterf
     {
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\RestCartReorderRequestAttributesTransfer $restCartReorderRequestAttributesTransfer
-     * @param \Generated\Shared\Transfer\CartReorderRequestTransfer $cartReorderRequestTransfer
-     *
-     * @return \Generated\Shared\Transfer\CartReorderRequestTransfer
-     */
     public function mapRestCartReorderRequestAttributesToCartReorderRequest(
         RestCartReorderRequestAttributesTransfer $restCartReorderRequestAttributesTransfer,
         CartReorderRequestTransfer $cartReorderRequestTransfer
@@ -36,12 +30,6 @@ class CartReorderRestRequestMapper implements CartReorderRestRequestMapperInterf
         return $this->executeRestCartReorderAttributesMapperPlugins($restCartReorderRequestAttributesTransfer, $cartReorderRequestTransfer);
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\RestCartReorderRequestAttributesTransfer $restCartReorderRequestAttributesTransfer
-     * @param \Generated\Shared\Transfer\CartReorderRequestTransfer $cartReorderRequestTransfer
-     *
-     * @return \Generated\Shared\Transfer\CartReorderRequestTransfer
-     */
     protected function executeRestCartReorderAttributesMapperPlugins(
         RestCartReorderRequestAttributesTransfer $restCartReorderRequestAttributesTransfer,
         CartReorderRequestTransfer $cartReorderRequestTransfer

@@ -12,10 +12,5 @@ use Generated\Shared\Transfer\CartReorderResponseTransfer;
 
 interface CartReorderRestApiToCartReorderClientInterface
 {
-    /**
-     * @param \Generated\Shared\Transfer\CartReorderRequestTransfer $cartReorderRequestTransfer
-     *
-     * @return \Generated\Shared\Transfer\CartReorderResponseTransfer
-     */
     public function reorder(CartReorderRequestTransfer $cartReorderRequestTransfer): CartReorderResponseTransfer;
 }

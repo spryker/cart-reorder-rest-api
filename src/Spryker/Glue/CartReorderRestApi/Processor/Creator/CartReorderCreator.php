@@ -35,12 +35,6 @@ class CartReorderCreator implements CartReorderCreatorInterface
     ) {
     }
 
-    /**
-     * @param \Spryker\Glue\GlueApplication\Rest\Request\Data\RestRequestInterface $restRequest
-     * @param \Generated\Shared\Transfer\RestCartReorderRequestAttributesTransfer $restCartReorderRequestAttributesTransfer
-     *
-     * @return \Spryker\Glue\GlueApplication\Rest\JsonApi\RestResponseInterface
-     */
     public function reorder(
         RestRequestInterface $restRequest,
         RestCartReorderRequestAttributesTransfer $restCartReorderRequestAttributesTransfer
@@ -68,12 +62,6 @@ class CartReorderCreator implements CartReorderCreatorInterface
             : $this->cartReorderRestResponseBuilder->buildSuccessfulResponse($cartReorderResponseTransfer, $restRequest);
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\CartReorderRequestTransfer $cartReorderRequestTransfer
-     * @param \Generated\Shared\Transfer\RestUserTransfer $restUserTransfer
-     *
-     * @return \Generated\Shared\Transfer\CartReorderRequestTransfer
-     */
     protected function executeCartReorderRequestExpanderPlugins(
         CartReorderRequestTransfer $cartReorderRequestTransfer,
         RestUserTransfer $restUserTransfer

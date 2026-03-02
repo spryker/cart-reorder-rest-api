@@ -12,13 +12,6 @@ use Generated\Shared\Transfer\RestErrorMessageTransfer;
 
 interface CartReorderRestErrorMapperInterface
 {
-    /**
-     * @param \Generated\Shared\Transfer\ErrorTransfer $errorTransfer
-     * @param \Generated\Shared\Transfer\RestErrorMessageTransfer $restErrorMessageTransfer
-     * @param string $locale
-     *
-     * @return \Generated\Shared\Transfer\RestErrorMessageTransfer
-     */
     public function mapErrorTransferToRestErrorMessageTransfer(
         ErrorTransfer $errorTransfer,
         RestErrorMessageTransfer $restErrorMessageTransfer,
