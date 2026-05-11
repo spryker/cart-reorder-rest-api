@@ -1,0 +1,57 @@
+resource:
+    name: CartReorder
+    shortName: cart-reorder
+    description: 'Reorder a previously placed order into a new cart'
+
+    processor: Spryker\Glue\CartReorderRestApi\Api\Storefront\Processor\CartReorderStorefrontProcessor
+
+    security: "is_granted('ROLE_CUSTOMER')"
+
+    operations:
+        - type: Post
+          uriTemplate: '/cart-reorder'
+          description: 'Create a new cart by reordering items from an existing order'
+          openapiContext:
+              summary: 'Reorder existing order'
+              description: 'Builds a new cart from the items of an existing order identified by its order reference. Returns the resulting cart.'
+              responses:
+                  201:
+                      description: 'Cart created from reorder.'
+                  400:
+                      description: 'Order reference is missing.'
+                  401:
+                      description: 'Missing or invalid access token.'
+                  403:
+                      description: 'Unauthorized cart action.'
+                  404:
+                      description: 'Order not found.'
+                  422:
+                      description: 'Errors appeared during cart reordering.'
+
+    properties:
+        orderReference:
+            type: string
+            writable: true
+            readable: true
+            required: true
+            description: 'Reference of the existing order to reorder'
+            openapiContext:
+                example: 'DE--1'
+
+        reorderStrategy:
+            type: string
+            writable: true
+            readable: true
+            required: false
+            description: 'Reorder strategy: leave empty to update the default cart, "replace" to replace items in the default cart, or "new" to create a new cart.'
+            openapiContext:
+                example: 'new'
+
+        isAmendment:
+            type: boolean
+            writable: true
+            readable: true
+            required: false
+            description: 'When true, the reorder is treated as an order amendment: items go into a quote linked to the original order so checkout updates that order instead of creating a new one.'
+            openapiContext:
+                example: true

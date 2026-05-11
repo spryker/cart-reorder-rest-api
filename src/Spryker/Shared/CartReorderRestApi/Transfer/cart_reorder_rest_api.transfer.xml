@@ -10,9 +10,20 @@
         <property name="orderReference" type="string" description="A unique reference identifier for a sales order."/>
         <property name="customerReference" type="string" description="A unique reference for a customer."/>
         <property name="reorderStrategy" type="string" description="The strategy to use when creating a new order from a previous one."/>
+        <property name="isAmendment" type="bool"/>
     </transfer>
 
     <transfer name="Quote">
+        <property name="uuid" type="string" description="A Universally Unique Identifier for an entity."/>
+        <property name="customer" type="Customer"/>
+        <property name="isDefault" type="bool"/>
+        <property name="idQuote" type="int"/>
+        <property name="voucherDiscounts" type="Discount[]" singular="voucherDiscount"/>
+        <property name="cartRuleDiscounts" type="Discount[]" singular="cartRuleDiscount"/>
+        <property name="promotionItems" type="PromotionItem[]" singular="promotionItem"/>
+        <property name="giftCards" type="GiftCard[]" singular="giftCard"/>
+        <property name="bundleItems" type="Item[]" singular="bundleItem"/>
+        <property name="items" type="Item[]" singular="item"/>
     </transfer>
 
     <transfer name="CartReorderResponse" strict="true">
@@ -33,5 +44,46 @@
 
     <transfer name="RestUser">
         <property name="naturalIdentifier" type="string" description="A human-readable unique identifier for a resource, such as a user's email."/>
+        <property name="surrogateIdentifier" type="int" description="A system-generated, non-human-readable unique identifier (like an auto-incrementing ID)."/>
+        <property name="idCompanyUser" type="int"/>
+        <property name="idCompany" type="int"/>
+    </transfer>
+
+    <transfer name="Locale">
+        <property name="localeName" type="string"/>
+    </transfer>
+
+    <transfer name="QuoteCriteriaFilter">
+        <property name="customerReference" type="string"/>
+    </transfer>
+
+    <transfer name="QuoteCollection">
+        <property name="quotes" type="Quote[]" singular="quote"/>
+    </transfer>
+
+    <transfer name="RestCartsAttributes">
+    </transfer>
+
+    <transfer name="Customer">
+        <property name="companyUserTransfer" type="CompanyUser"/>
+        <property name="idCustomer" type="int"/>
+        <property name="customerReference" type="string"/>
+    </transfer>
+
+    <transfer name="Discount">
+    </transfer>
+
+    <transfer name="PromotionItem">
+    </transfer>
+
+    <transfer name="GiftCard">
+    </transfer>
+
+    <transfer name="Item">
+    </transfer>
+
+    <transfer name="CompanyUser">
+        <property name="idCompanyUser" type="int"/>
+        <property name="fkCompany" type="int"/>
     </transfer>
 </transfers>
