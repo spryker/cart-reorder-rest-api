@@ -12,16 +12,16 @@ namespace Spryker\Glue\CartReorderRestApi\Api\Storefront\Processor;
 use Generated\Api\Storefront\CartReorderStorefrontResource;
 use Generated\Api\Storefront\CartsStorefrontResource;
 use Generated\Shared\Transfer\CartReorderRequestTransfer;
-use Generated\Shared\Transfer\CustomerTransfer;
 use Generated\Shared\Transfer\QuoteCriteriaFilterTransfer;
 use Generated\Shared\Transfer\QuoteTransfer;
-use Generated\Shared\Transfer\RestUserTransfer;
 use Spryker\ApiPlatform\EventSubscriber\JsonApiRequestValidatorSubscriber;
 use Spryker\ApiPlatform\State\Processor\AbstractStorefrontProcessor;
 use Spryker\Client\CartReorder\CartReorderClientInterface;
 use Spryker\Client\CartsRestApi\CartsRestApiClientInterface;
 use Spryker\Glue\CartReorderRestApi\Api\Storefront\Exception\CartReorderExceptionFactory;
+use Spryker\Glue\CartReorderRestApi\CartReorderRestApiConfig;
 use Spryker\Glue\CartsRestApi\Api\Storefront\Mapper\StorefrontCartMapperInterface;
+use Spryker\Glue\GlueApplication\Compatibility\RequestBuilder\SyntheticRestRequestBuilderInterface;
 use Spryker\Service\Container\Attributes\Plugins;
 use Spryker\Service\Serializer\SerializerServiceInterface;
 
@@ -46,6 +46,7 @@ class CartReorderStorefrontProcessor extends AbstractStorefrontProcessor
         protected CartsRestApiClientInterface $cartsRestApiClient,
         protected StorefrontCartMapperInterface $cartMapper,
         protected SerializerServiceInterface $serializer,
+        protected SyntheticRestRequestBuilderInterface $syntheticRestRequestBuilder,
         protected CartReorderExceptionFactory $exceptionFactory = new CartReorderExceptionFactory(),
         #[Plugins(dependencyProviderMethod: 'getCartReorderRequestExpanderPlugins')]
         protected array $cartReorderRequestExpanderPlugins = [],
@@ -63,19 +64,14 @@ class CartReorderStorefrontProcessor extends AbstractStorefrontProcessor
         $reorderStrategy = $this->extractReorderStrategyFromData($data);
         $isAmendment = $this->extractIsAmendmentFromData($data);
         $customerReference = $this->getCustomerReference();
-        $customerTransfer = $this->getCustomer();
 
         $cartReorderRequestTransfer = (new CartReorderRequestTransfer())
             ->setOrderReference($orderReference)
             ->setCustomerReference($customerReference)
             ->setReorderStrategy($reorderStrategy)
-            ->setIsAmendment($isAmendment)
-            ->setCompanyUserTransfer($customerTransfer->getCompanyUserTransfer());
+            ->setIsAmendment($isAmendment);
 
-        $cartReorderRequestTransfer = $this->executeCartReorderRequestExpanderPlugins(
-            $cartReorderRequestTransfer,
-            $customerTransfer,
-        );
+        $cartReorderRequestTransfer = $this->executeCartReorderRequestExpanderPlugins($cartReorderRequestTransfer);
 
         $cartReorderResponseTransfer = $this->cartReorderClient->reorder($cartReorderRequestTransfer);
 
@@ -270,21 +266,22 @@ class CartReorderStorefrontProcessor extends AbstractStorefrontProcessor
         throw $this->exceptionFactory->createInvalidIsAmendmentTypeException();
     }
 
-    /**
-     * Mirrors the legacy `CartReorderCreator::executeCartReorderRequestExpanderPlugins()` so that
-     * Pyz-registered `CartReorderRequestExpanderPluginInterface` plugins (company / business unit
-     * enrichment, custom project plugins) keep populating the request transfer the same way they
-     * did before the migration.
-     */
     protected function executeCartReorderRequestExpanderPlugins(
-        CartReorderRequestTransfer $cartReorderRequestTransfer,
-        CustomerTransfer $customerTransfer
+        CartReorderRequestTransfer $cartReorderRequestTransfer
     ): CartReorderRequestTransfer {
         if ($this->cartReorderRequestExpanderPlugins === []) {
             return $cartReorderRequestTransfer;
         }
 
-        $restUserTransfer = $this->buildRestUserTransfer($customerTransfer);
+        $restUserTransfer = $this->syntheticRestRequestBuilder->build(
+            $this->getRequest(),
+            $this->getCustomer(),
+            CartReorderRestApiConfig::RESOURCE_CART_REORDER,
+        )->getRestUser();
+
+        if ($restUserTransfer === null) {
+            return $cartReorderRequestTransfer;
+        }
 
         foreach ($this->cartReorderRequestExpanderPlugins as $cartReorderRequestExpanderPlugin) {
             $cartReorderRequestTransfer = $cartReorderRequestExpanderPlugin->expand(
@@ -294,35 +291,6 @@ class CartReorderStorefrontProcessor extends AbstractStorefrontProcessor
         }
 
         return $cartReorderRequestTransfer;
-    }
-
-    /**
-     * Constructs the legacy `RestUserTransfer` shape expected by
-     * {@see CartReorderRequestExpanderPluginInterface::expand()} from the API Platform
-     * `CustomerTransfer` already on the request. Only the fields the existing expander
-     * plugins consume are populated.
-     */
-    protected function buildRestUserTransfer(CustomerTransfer $customerTransfer): RestUserTransfer
-    {
-        $restUserTransfer = new RestUserTransfer();
-
-        if ($customerTransfer->getIdCustomer() !== null) {
-            $restUserTransfer->setSurrogateIdentifier($customerTransfer->getIdCustomer());
-        }
-
-        if ($customerTransfer->getCustomerReference() !== null) {
-            $restUserTransfer->setNaturalIdentifier($customerTransfer->getCustomerReference());
-        }
-
-        $companyUserTransfer = $customerTransfer->getCompanyUserTransfer();
-
-        if ($companyUserTransfer !== null) {
-            $restUserTransfer
-                ->setIdCompanyUser($companyUserTransfer->getIdCompanyUser())
-                ->setIdCompany($companyUserTransfer->getFkCompany());
-        }
-
-        return $restUserTransfer;
     }
 
     protected function mapQuoteTransferToCartsResource(QuoteTransfer $quoteTransfer): CartsStorefrontResource
