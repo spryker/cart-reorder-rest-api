@@ -17,16 +17,12 @@ resource:
               responses:
                   201:
                       description: 'Cart created from reorder.'
-                  400:
-                      description: 'Order reference is missing.'
                   401:
-                      description: 'Missing or invalid access token.'
+                      description: 'Invalid access token.'
                   403:
-                      description: 'Unauthorized cart action.'
-                  404:
-                      description: 'Order not found.'
+                      description: 'Missing access token.'
                   422:
-                      description: 'Errors appeared during cart reordering.'
+                      description: 'Order reference is blank, the order does not belong to the authenticated customer (code 5801), or the reorder itself failed (code 5800).'
 
     properties:
         orderReference:
