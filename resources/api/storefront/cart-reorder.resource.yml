@@ -28,7 +28,9 @@ resource:
         orderReference:
             type: string
             writable: true
-            readable: true
+            # The operation answers the cart the reorder produced, not a cart-reorder resource, so
+            # none of these three inputs is ever read back.
+            readable: false
             required: true
             description: 'Reference of the existing order to reorder'
             openapiContext:
@@ -37,7 +39,9 @@ resource:
         reorderStrategy:
             type: string
             writable: true
-            readable: true
+            # The operation answers the cart the reorder produced, not a cart-reorder resource, so
+            # none of these three inputs is ever read back.
+            readable: false
             required: false
             description: 'Reorder strategy: leave empty to update the default cart, "replace" to replace items in the default cart, or "new" to create a new cart.'
             openapiContext:
@@ -46,7 +50,9 @@ resource:
         isAmendment:
             type: boolean
             writable: true
-            readable: true
+            # The operation answers the cart the reorder produced, not a cart-reorder resource, so
+            # none of these three inputs is ever read back.
+            readable: false
             required: false
             description: 'When true, the reorder is treated as an order amendment: items go into a quote linked to the original order so checkout updates that order instead of creating a new one.'
             openapiContext:
